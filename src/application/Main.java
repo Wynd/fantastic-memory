@@ -15,27 +15,13 @@ public class Main extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
-		Parent root = FXMLLoader.load(getClass().getResource("ui/UIList.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("ui/UILogin.fxml"));
 
-        Scene scene = new Scene(root, 300, 275);
+        Scene scene = new Scene(root);
         
-        //primaryStage.centerOnScreen();
-        primaryStage.setTitle("My Lists");
+        primaryStage.setTitle("Fantastic Memory");
         primaryStage.setScene(scene);
         primaryStage.show();
-	    
-		/*try 
-		{
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();
-		}
-		catch(Exception e) 
-		{
-			e.printStackTrace();
-		}*/
 	}
 	
 	public static void main(String[] args) 
