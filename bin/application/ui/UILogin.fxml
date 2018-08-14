@@ -27,7 +27,7 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
                      </effect>
                   </Text>
-                  <Button fx:id="buttonRegister" layoutX="206.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="108.0" stylesheets="@css/fullstyle.css" text="Register" textAlignment="CENTER">
+                  <Button fx:id="buttonRegister" layoutX="206.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleOpenRegistrationForm" prefHeight="44.0" prefWidth="108.0" stylesheets="@css/fullstyle.css" text="Register" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -35,7 +35,7 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
                      </effect>
                   </Button>
-                  <Button fx:id="buttonLogin" layoutX="369.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="108.0" stylesheets="@css/fullstyle.css" text="Login" textAlignment="CENTER">
+                  <Button fx:id="buttonLogin" layoutX="369.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="44.0" prefWidth="108.0" stylesheets="@css/fullstyle.css" text="Login" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -43,7 +43,7 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
                      </effect>
                   </Button>
-                  <Hyperlink fx:id="hyperlinkPasswordRevovery" layoutX="355.0" layoutY="-23.0" onAction="#handleClicks" style="-fx-text-fill: #97C145;" text="Lost your Password ?" underline="true">
+                  <Hyperlink fx:id="hyperlinkPasswordRevovery" layoutX="355.0" layoutY="-23.0" style="-fx-text-fill: #97C145;" text="Lost your Password ?" underline="true">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
                      </font>
@@ -51,7 +51,7 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
                      </effect>
                   </Hyperlink>
-                  <PasswordField fx:id="fieldPassword" layoutX="235.0" layoutY="-53.0" onAction="#handleClicks" prefHeight="32.0" prefWidth="224.0" promptText="Password" />
+                  <PasswordField fx:id="fieldPassword" layoutX="235.0" layoutY="-53.0" prefHeight="32.0" prefWidth="224.0" promptText="Password" />
                   <Text layoutX="235.0" layoutY="-62.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #97C145;" text="Password">
                      <font>
                         <Font name="System Bold" size="30.0" />

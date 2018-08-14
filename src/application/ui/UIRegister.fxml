@@ -27,7 +27,7 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
                      </effect>
                   </Text>
-                  <Button fx:id="buttonCancelRegister" layoutX="206.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="113.0" stylesheets="@css/fullstyle.css" text="Cancel" textAlignment="CENTER">
+                  <Button fx:id="buttonCancelRegister" layoutX="206.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleCloseRegistrationForm" prefHeight="44.0" prefWidth="113.0" stylesheets="@css/fullstyle.css" text="Cancel" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -35,7 +35,7 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
                      </effect>
                   </Button>
-                  <Button fx:id="buttonConfirmRegister" layoutX="369.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="108.0" stylesheets="@css/fullstyle.css" text="Register" textAlignment="CENTER">
+                  <Button fx:id="buttonConfirmRegister" layoutX="369.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleConfirmRegistration" prefHeight="44.0" prefWidth="108.0" stylesheets="@css/fullstyle.css" text="Register" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -43,7 +43,7 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
                      </effect>
                   </Button>
-                  <PasswordField fx:id="fieldPassword" layoutX="233.0" layoutY="-243.0" onAction="#handleClicks" prefHeight="32.0" prefWidth="224.0" promptText="Password" />
+                  <PasswordField fx:id="fieldPassword" layoutX="233.0" layoutY="-243.0" prefHeight="32.0" prefWidth="224.0" promptText="Password" />
                   <Text layoutX="233.0" layoutY="-249.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #97C145;" text="Password">
                      <font>
                         <Font name="System Bold" size="24.0" />
@@ -61,7 +61,7 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
                      </effect>
                   </Text>
-                  <PasswordField fx:id="fieldPassword1" layoutX="233.0" layoutY="-148.0" onAction="#handleClicks" prefHeight="32.0" prefWidth="224.0" promptText="Repeat Password" />
+                  <PasswordField fx:id="fieldPassword1" layoutX="233.0" layoutY="-148.0" prefHeight="32.0" prefWidth="224.0" promptText="Repeat Password" />
                   <TextField fx:id="fieldEmail" layoutX="233.0" layoutY="-64.0" prefHeight="32.0" prefWidth="224.0" promptText="Email" />
                   <Text layoutX="233.0" layoutY="-71.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #97C145;" text="Email">
                      <font>

@@ -1,4 +1,4 @@
-package model;
+package application.model;
 
 public enum Type {
 	TODOLIST(1),SHOPPINGLIST(2),APPOINTMENTS(3),TOTAKELIST(4);

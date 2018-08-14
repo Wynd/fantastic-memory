@@ -19,14 +19,6 @@
          <children>
             <Group>
                <children>
-                  <Text fx:id="labelMyListsTitle" layoutX="102.0" layoutY="-157.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #FFFFFF;" text="My Lists" wrappingWidth="209.064453125">
-                     <font>
-                        <Font name="System Bold" size="48.0" />
-                     </font>
-                     <effect>
-                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
-                     </effect>
-                  </Text>
                   <Label layoutX="180.0" layoutY="120.0" prefHeight="146.0" prefWidth="132.0" />
                   <ScrollPane hbarPolicy="NEVER" hmax="0.0" layoutX="6.0" layoutY="-85.0" prefHeight="512.0" prefWidth="298.0" styleClass="listTypes" stylesheets="@css/fullstyle.css">
                      <content>
@@ -43,10 +35,10 @@
                <children>
                   <ScrollPane hbarPolicy="NEVER" hmax="0.0" layoutX="28.0" prefHeight="542.0" prefWidth="732.0" styleClass="listNotes" stylesheets="@css/fullstyle.css">
                      <content>
-                        <VBox fx:id="paneListsMenu1" prefHeight="535.0" prefWidth="740.0" spacing="20.0" />
+                        <VBox fx:id="paneListNotes" prefHeight="535.0" prefWidth="740.0" spacing="20.0" />
                      </content>
                   </ScrollPane>
-                  <Text fx:id="labelListTitle" layoutX="28.0" layoutY="-37.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #FFFFFF;" text="My Custom List" wrappingWidth="592.064453125">
+                  <Text fx:id="labelListTitle" layoutX="28.0" layoutY="-37.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #FFFFFF;" text="My Lists" wrappingWidth="592.064453125">
                      <font>
                         <Font name="System Bold" size="36.0" />
                      </font>
@@ -54,11 +46,11 @@
                         <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
                      </effect>
                   </Text>
-                  <Button fx:id="buttonAddNewNote" layoutX="671.0" layoutY="-74.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="54.0" stylesheets="@css/fullstyle.css">
+                  <Button fx:id="buttonAddNewNote" layoutX="671.0" layoutY="-74.0" mnemonicParsing="false" onAction="#handleAddNewNote" prefHeight="60.0" prefWidth="54.0" stylesheets="@css/fullstyle.css">
                      <graphic>
                         <ImageView fitHeight="52.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../assets/icons8-add-list-64.png" />
+                              <Image url="@../../assets/icons8-add-list-100.png" />
                            </image>
                         </ImageView>
                      </graphic>

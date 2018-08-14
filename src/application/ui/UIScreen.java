@@ -9,7 +9,6 @@ public enum UIScreen
 	
 	private String path;
 	private String stageTitle;
-	private String stageIcon;
 	
 	private UIScreen(String path, String stageTitle)
 	{
