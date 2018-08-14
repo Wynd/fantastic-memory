@@ -2,6 +2,8 @@ package application;
 	
 import java.io.IOException;
 
+import application.ui.UIController;
+import application.ui.UIScreen;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,15 +15,12 @@ public class Main extends Application
 {
 	
 	@Override
-	public void start(Stage primaryStage) throws Exception
+	public void start(Stage primaryStage)
 	{
-		Parent root = FXMLLoader.load(getClass().getResource("ui/UILogin.fxml"));
-
-        Scene scene = new Scene(root);
-        
-        primaryStage.setTitle("Fantastic Memory");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+		
+		UIController.instance.showScreen(primaryStage, UIScreen.LOGIN);
+		
+		primaryStage.show();
 	}
 	
 	public static void main(String[] args) 

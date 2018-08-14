@@ -1,0 +1,33 @@
+/*
+ *  #44A3D1 - BLUE
+ * 	#97C145 - GREEN
+ */
+
+.button
+{
+	-fx-background-color: #97C145;
+}
+
+.button:hover
+{
+	-fx-background-color: #b3dd61;
+}
+
+.button:pressed
+{
+	-fx-background-color: #7da039;
+}
+
+.listTypes
+{
+	-fx-background: #97C145;
+	-fx-border-color: #97C145;
+	-fx-background-color: #97C145;
+}
+
+.listNotes
+{
+	-fx-background: #44A3D1;
+	-fx-border-color: #44A3D1;
+	-fx-background-color: #44A3D1;
+}

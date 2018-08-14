@@ -1,33 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="500.0" style="-fx-background-color: #60B5D4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.UIController">
+<AnchorPane fx:id="paneLoginRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="500.0" style="-fx-background-color: #44A3D1;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.UIController">
    <children>
-      <TextField fx:id="fieldUsername" layoutX="143.0" layoutY="72.0" prefHeight="32.0" prefWidth="224.0" />
-      <Text layoutX="143.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #97C145;" text="Username">
-         <font>
-            <Font name="System Bold" size="30.0" />
-         </font>
-         <effect>
-            <DropShadow height="12.105" offsetX="1.0" offsetY="1.0" radius="4.06875" spread="0.09" width="6.17" />
-         </effect>
-      </Text>
-      <Text layoutX="143.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #97C145;" text="Password">
-         <font>
-            <Font name="System Bold" size="30.0" />
-         </font>
-         <effect>
-            <DropShadow height="12.105" offsetX="1.0" offsetY="1.0" radius="4.06875" spread="0.09" width="6.17" />
-         </effect>
-      </Text>
-      <TextField fx:id="fieldPassword" layoutX="143.0" layoutY="166.0" onAction="#handleClicks" prefHeight="32.0" prefWidth="224.0" />
-      <Button fx:id="buttonRegister" layoutX="143.0" layoutY="288.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="78.0" text="Register" textAlignment="CENTER" />
-      <Button fx:id="buttonLogin" layoutX="284.0" layoutY="288.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="40.0" prefWidth="78.0" text="Login" textAlignment="CENTER" />
+      <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Group StackPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="fieldUsername" layoutX="235.0" layoutY="-139.0" prefHeight="32.0" prefWidth="224.0" promptText="Username" />
+                  <Text layoutX="235.0" layoutY="-147.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #97C145;" text="Username">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                     <effect>
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
+                     </effect>
+                  </Text>
+                  <Button fx:id="buttonRegister" layoutX="206.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="108.0" stylesheets="@css/fullstyle.css" text="Register" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <effect>
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
+                     </effect>
+                  </Button>
+                  <Button fx:id="buttonLogin" layoutX="369.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="44.0" prefWidth="108.0" stylesheets="@css/fullstyle.css" text="Login" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <effect>
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
+                     </effect>
+                  </Button>
+                  <Hyperlink fx:id="hyperlinkPasswordRevovery" layoutX="355.0" layoutY="-23.0" onAction="#handleClicks" style="-fx-text-fill: #97C145;" text="Lost your Password ?" underline="true">
+                     <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                     </font>
+                     <effect>
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
+                     </effect>
+                  </Hyperlink>
+                  <PasswordField fx:id="fieldPassword" layoutX="235.0" layoutY="-53.0" onAction="#handleClicks" prefHeight="32.0" prefWidth="224.0" promptText="Password" />
+                  <Text layoutX="235.0" layoutY="-62.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #97C145;" text="Password">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                     <effect>
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
+                     </effect>
+                  </Text>
+                  <Label layoutX="500.0" layoutY="110.0" />
+               </children>
+            </Group>
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>
