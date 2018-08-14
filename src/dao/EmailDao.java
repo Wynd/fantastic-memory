@@ -14,7 +14,7 @@ import model.Email;
 public class EmailDao {
 
 	private Connection connection;
-    PreparedStatement ps1,ps2,ps3,ps4;
+    PreparedStatement ps1,ps2,ps3,ps4,ps5;
     
     public EmailDao(Connection connection) {	
 		this.connection=connection;
@@ -23,6 +23,7 @@ public class EmailDao {
 			ps2=this.connection.prepareStatement("select * from emails where date_scheduled=? and is_sent=?");
 			ps3=this.connection.prepareStatement("update emails set date_scheduled=? and is_sent=? where id_note=?");
 			ps4=this.connection.prepareStatement("delete from emails where id_note=?");
+			ps5=this.connection.prepareStatement("delete from emails where is_sent=?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -89,6 +90,17 @@ public class EmailDao {
     		
     		ps4.setInt(3, id_date);
     		ps4.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
+    
+ public void deleteSentEmail() {
+    	
+    	try {
+    		
+    		ps5.setBoolean(1,true);
+    		ps5.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
