@@ -13,8 +13,8 @@ import javax.mail.internet.MimeMessage;
 
 public class SendEmail {
 
-	final String senderEmailID = "-"; 
-	final String senderPassword = "-"; 
+	final String senderEmailID = "mylist.reminder@gmail.com"; 
+	final String senderPassword = "PassList1"; 
 	final String emailSMTPserver = "smtp.gmail.com";
 	final String emailServerPort = "465"; 
 	

@@ -3,10 +3,13 @@ package application.ui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
 
 import application.model.Note;
+import application.model.Type;
+import application.service.NotesService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -105,7 +108,7 @@ public class UIMyListsController implements Initializable
 
 		shoppingListButtons.put(new Button("My Shopping List"), new EventHandler<ActionEvent>() 
 		{
-            public void handle(ActionEvent e) { /** TODO add handling method for lists, showing each note inside paneListNotes */ }
+            public void handle(ActionEvent e) {}
 		});
 		shoppingListButtons.put(backToMenu, new EventHandler<ActionEvent>() 
 		{
@@ -114,7 +117,7 @@ public class UIMyListsController implements Initializable
 		
 		todoListButtons.put(new Button("My To Do List"), new EventHandler<ActionEvent>() 
 		{
-            public void handle(ActionEvent e) { /** TODO add handling method for lists, showing each note inside paneListNotes */ }
+            public void handle(ActionEvent e) {}
 		});
 		todoListButtons.put(backToMenu, new EventHandler<ActionEvent>() 
 		{
@@ -123,7 +126,7 @@ public class UIMyListsController implements Initializable
 		
 		appointmentsButtons.put(new Button("Appointments"), new EventHandler<ActionEvent>() 
 		{
-            public void handle(ActionEvent e) { /** TODO add handling method for lists, showing each note inside paneListNotes */ }
+            public void handle(ActionEvent e) {}
 		});
 		appointmentsButtons.put(backToMenu, new EventHandler<ActionEvent>() 
 		{
@@ -132,7 +135,7 @@ public class UIMyListsController implements Initializable
 		
 		totakeListButtons.put(new Button("To Take Lists"), new EventHandler<ActionEvent>() 
 		{
-            public void handle(ActionEvent e) { /** TODO add handling method for lists, showing each note inside paneListNotes */ }
+            public void handle(ActionEvent e) {}
 		});
 		totakeListButtons.put(backToMenu, new EventHandler<ActionEvent>() 
 		{
@@ -170,6 +173,9 @@ public class UIMyListsController implements Initializable
 	{
 		try
 		{
+			
+			/** TODO Add checkbox for each item, also link it for database changes */
+			
 			Pane newNoteRoot = new Pane();			
 			newNoteRoot.setPrefSize(200, 150);
 			newNoteRoot.setMinWidth(paneListNotes.getPrefWidth());
@@ -201,7 +207,8 @@ public class UIMyListsController implements Initializable
 			noteDescEdit.setVisible(false);
 
 			ImageView editNoteImage = new ImageView();
-			Button editNote = createOptionButton(512, new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")), editNoteImage);
+			editNoteImage.setPreserveRatio(true);
+			Button editNote = UIManager.instance.createButtonWithImage(512, 70, new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")), 45, 50, editNoteImage, 55, 50);
 			editNote.setOnAction(new EventHandler<ActionEvent>()
 			{
 				public void handle(ActionEvent event) 
@@ -212,39 +219,35 @@ public class UIMyListsController implements Initializable
 					noteTitleEdit.setVisible(!noteTitleEdit.isVisible());
 					noteDescEdit.setVisible(!noteDescEdit.isVisible());
 					
-					if(newNoteTitle.isVisible())
+					try
 					{
-						try
-						{
+						if(newNoteTitle.isVisible())
 							editNoteImage.setImage(new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")));
-						}
-						catch(Exception e)
-						{
-							e.printStackTrace();
-						}
+						else
+							editNoteImage.setImage(new Image(getClass().getResourceAsStream("/assets/icons8-checkmark-100.png")));				
 					}
-					else
+					catch(Exception e)
 					{
-						try
-						{
-							editNoteImage.setImage(new Image(getClass().getResourceAsStream("/assets/icons8-checkmark-100.png")));
-						}
-						catch(Exception e)
-						{
-							e.printStackTrace();
-						}					
+						e.printStackTrace();
 					}
 					
 					if(!newNoteTitle.getText().equalsIgnoreCase(noteTitleEdit.getText()))
+					{
 						newNoteTitle.setText(noteTitleEdit.getText());
+						NotesService.getInstance().changeNote(note);
+					}
 					
 					if(!newNoteDesc.getText().equalsIgnoreCase(noteDescEdit.getText()))
-						newNoteDesc.setText(noteDescEdit.getText());					
+					{
+						newNoteDesc.setText(noteDescEdit.getText());
+						NotesService.getInstance().changeNote(note);
+					}
 				}	
 			});
 			
 			ImageView timerNoteImage = new ImageView();
-			Button timerNote = createOptionButton(587, new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")), timerNoteImage);
+			timerNoteImage.setPreserveRatio(true);
+			Button timerNote = UIManager.instance.createButtonWithImage(587, 70, new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")), 45, 50, timerNoteImage, 55, 50);
 			timerNote.setOnAction(new EventHandler<ActionEvent>()
 			{
 				public void handle(ActionEvent event) 
@@ -255,29 +258,32 @@ public class UIMyListsController implements Initializable
 			            root = FXMLLoader.load(getClass().getResource("UIReminderTime.fxml"));
 			            Stage stage = new Stage();
 			            stage.getIcons().add(new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")));
-			            stage.setTitle("Set Reminder");
-			            stage.setScene(new Scene(root, 330, 250));
-			            stage.show();
+			            stage.setTitle("Reminders");
+			            stage.setScene(new Scene(root, 430, 570));
+			            stage.show();          
 			        }
 			        catch (Exception e) 
 			        {
 			            e.printStackTrace();
 			        }
-				}	
+				}
 			});	
 			
 			ImageView deleteNoteImage = new ImageView();
-			Button deleteNote = createOptionButton(664, new Image(getClass().getResourceAsStream("/assets/icons8-cancel-100.png")), deleteNoteImage);			
+			deleteNoteImage.setPreserveRatio(true);
+			Button deleteNote = UIManager.instance.createButtonWithImage(664, 70, new Image(getClass().getResourceAsStream("/assets/icons8-delete-bin-100.png")), 45, 50, deleteNoteImage, 55, 50);			
 			deleteNote.setOnAction(new EventHandler<ActionEvent>()
 			{
 				public void handle(ActionEvent event) 
 				{
 					paneListNotes.getChildren().remove(newNoteRoot);
+					NotesService.getInstance().deleteNote(note.getId());
 				}	
 			});			
 			
-			newNoteRoot.getChildren().addAll(newNoteTitle, noteTitleEdit, newNoteDesc, noteDescEdit, editNote, timerNote, deleteNote); // noteTitleEdit, noteDescEdit
-			this.paneListNotes.getChildren().add(newNoteRoot);
+			newNoteRoot.getChildren().addAll(newNoteTitle, noteTitleEdit, newNoteDesc, noteDescEdit, editNote, timerNote, deleteNote);
+			this.paneListNotes.getChildren().add(0, newNoteRoot);
+			
 		}
 		catch(Exception e)
 		{
@@ -285,27 +291,15 @@ public class UIMyListsController implements Initializable
 		}
 	}
 
-	private Button createOptionButton(int posX, Image img, ImageView genericImage)
+	private void loadSavedNotes()
 	{
-		Button genericBtn = new Button();
-		genericBtn.setPrefSize(55, 50);
-		genericBtn.setLayoutX(posX);
-		genericBtn.setLayoutY(70);
-		genericImage.setFitWidth(45);
-		genericImage.setFitHeight(50);
-		try
-		{
-			genericImage.setImage(img);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		genericBtn.setGraphic(genericImage);
+		List<Note> savedNotes = NotesService.getInstance().getListOfNotes(UIManager.instance.getUserId(), UIManager.instance.getTypeForNotes());
 		
-		return genericBtn;
+		for(Note n : savedNotes)
+		{
+			this.addNoteInList(n);
+		}
 	}
-
 	
 	@FXML
 	public void handleOpenShoppingLists(ActionEvent event)
@@ -317,6 +311,10 @@ public class UIMyListsController implements Initializable
 		initButtons(shoppingListButtons);	
 		
 		labelListTitle.setText("My Shopping List");
+		
+		UIManager.instance.setTypeForNotes(Type.SHOPPINGLIST.getId());
+		
+		loadSavedNotes();
 	}
 
 	@FXML
@@ -329,6 +327,10 @@ public class UIMyListsController implements Initializable
 		initButtons(totakeListButtons);
 		
 		labelListTitle.setText("My To Take List");
+		
+		UIManager.instance.setTypeForNotes(Type.TOTAKELIST.getId());
+		
+		loadSavedNotes();
 	}
 
 	@FXML
@@ -340,7 +342,11 @@ public class UIMyListsController implements Initializable
 		buttonsToAdd.clear();
 		initButtons(appointmentsButtons);
 		
-		labelListTitle.setText("My Appointments");
+		labelListTitle.setText("My Appointment");
+		
+		UIManager.instance.setTypeForNotes(Type.APPOINTMENTS.getId());
+		
+		loadSavedNotes();
 	}
 	
 	@FXML
@@ -353,6 +359,10 @@ public class UIMyListsController implements Initializable
 		initButtons(todoListButtons);
 		
 		labelListTitle.setText("My To Do List");
+		
+		UIManager.instance.setTypeForNotes(Type.TODOLIST.getId());
+		
+		loadSavedNotes();
 	}
 	
 	@FXML
@@ -365,6 +375,8 @@ public class UIMyListsController implements Initializable
 		initButtons(mainMenuButtons);
 		
 		labelListTitle.setText("My Lists");
+		
+		this.paneListNotes.getChildren().removeAll(this.paneListNotes.getChildren());
 	}
 
 	@FXML
@@ -374,7 +386,9 @@ public class UIMyListsController implements Initializable
 
 		note.setTitle("Example Note");
 		note.setMessage("Example Message");
+		note.setId_type(UIManager.instance.getTypeForNotes());
 		
-		this.addNoteInList(note);
+		NotesService.getInstance().addNote(UIManager.instance.getUserId(), note.getTitle(), note.getMessage(), UIManager.instance.getTypeForNotes(), false);
+		loadSavedNotes();
 	}
 }

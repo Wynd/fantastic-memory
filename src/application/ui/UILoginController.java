@@ -39,6 +39,7 @@ public class UILoginController implements Initializable
 	public void handleLogin(ActionEvent event)
 	{
 		UIManager.instance.showScreen(buttonRegister, UIScreen.LISTSMENU);
+		UIManager.instance.setUserId(3);
 		/*if(!this.fieldUsername.getText().isEmpty() && !this.fieldPassword.getText().isEmpty())
 		{
 			User usr = LoginService.getInstance().login(this.fieldUsername.getText(), this.fieldPassword.getText()).orElse(null);

@@ -45,7 +45,7 @@
                         <Font name="System Bold" size="36.0" />
                      </font>
                      <effect>
-                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.3" width="6.0" />
                      </effect>
                   </Text>
                   <Button fx:id="buttonAddNewNote" layoutX="671.0" layoutY="-74.0" mnemonicParsing="false" onAction="#handleAddNewNote" prefHeight="60.0" prefWidth="54.0" stylesheets="@css/fullstyle.css">
@@ -56,6 +56,9 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <effect>
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" width="6.0" />
+                     </effect>
                   </Button>
                </children>
             </Group>

@@ -40,7 +40,7 @@
                         <Font name="System Bold" size="30.0" />
                      </font>
                      <effect>
-                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.2" width="6.0" />
                      </effect>
                   </Text>
                   <Text layoutX="235.0" layoutY="-62.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #97C145;" text="Password">
@@ -48,7 +48,7 @@
                         <Font name="System Bold" size="30.0" />
                      </font>
                      <effect>
-                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.5" width="6.0" />
+                        <DropShadow height="6.0" offsetX="1.0" offsetY="1.0" radius="2.5" spread="0.2" width="6.0" />
                      </effect>
                   </Text>
                   <Label layoutX="500.0" layoutY="110.0" />
