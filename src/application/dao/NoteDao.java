@@ -6,8 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import application.model.Note;
+
+
 
 public class NoteDao {
 	
@@ -20,9 +23,9 @@ public class NoteDao {
  			ps1=this.connection.prepareStatement("insert into notes values (null,?,?,?,?,?,?)");
  			ps2=this.connection.prepareStatement("select * from notes where id_user=? and id_type=?");
  			ps3=this.connection.prepareStatement("select * from notes where id_user=?  and id_type=? and checked=?");
- 			ps4=this.connection.prepareStatement("delete * from notes where id=?");
+ 			ps4=this.connection.prepareStatement("delete from notes where id=?");
  			ps5=this.connection.prepareStatement("select * from notes where id=?");
- 			ps6=this.connection.prepareStatement("update notes set title=? and message=? and checked=?");
+ 			ps6=this.connection.prepareStatement("update notes set title=? and message=? and checked=? where id=?");
  		} catch (SQLException e) {
  			e.printStackTrace();
  		}
@@ -110,7 +113,7 @@ public class NoteDao {
     	 
      }
      
-     public void deleteDate(int id) {
+     public void deleteNotes(int id) {
     	 
     	
     	 try {
@@ -121,13 +124,37 @@ public class NoteDao {
 			e.printStackTrace();
 		}
      }
+     public Optional<Note> getSelectedNote(int id) {
+    	 Note note=null;
+    	 try {
+    		 ps5.setInt(1, id);
+			ResultSet rs=ps5.executeQuery();
+			if(rs.next()) {
+				note=new Note();
+				note.setId(id);
+				note.setId_user(rs.getInt(2));
+				note.setTitle(rs.getString(3));
+				note.setMessage(rs.getString(4));
+				note.setId_type(rs.getInt(5));
+				note.setChecked(rs.getBoolean(6));
+				note.setId_date(rs.getInt(7));	
+				
+				
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+    	 return Optional.ofNullable(note);
+     }
      
-     public void updateDate(String title,String message,boolean checked) {
+     public void updateDate(String title,String message,boolean checked,int id) {
     	 
     	 try {
     		 ps6.setString(1, title);
     		 ps6.setString(2, message);
     		 ps6.setBoolean(3, checked);
+    		 ps6.setInt(4, id);
 			ps6.executeUpdate();
 		} catch (SQLException e) {
 			

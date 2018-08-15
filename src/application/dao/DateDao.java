@@ -2,19 +2,21 @@ package application.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class DateDao {
 
 	private Connection connection;
-    PreparedStatement ps1,ps2;
+    PreparedStatement ps1,ps2,ps3;
     
     public DateDao(Connection connection) {	
 		this.connection=connection;
 		try {
 			ps1=this.connection.prepareStatement("insert into dates values (null,?,?)");
 			ps2=this.connection.prepareStatement("update dates set updated_date=? where id=?");
+			ps3=this.connection.prepareStatement("select id from dates order by created_date desc");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -40,10 +42,25 @@ public class DateDao {
 			
 			ps2.setObject(1,updated_date);
 			ps2.setInt(2, id);
-			ps1.executeUpdate();
+			ps2.executeUpdate();
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
 		}
+    }
+    public int returnIdDate() {
+    	int id=0;
+    	try {
+			ResultSet rs=ps3.executeQuery();
+			if(rs.next()) {
+				
+				id=rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+    	return id;
     }
 }

@@ -20,7 +20,7 @@ public class EmailDao {
 		this.connection=connection;
 		try {
 			ps1=this.connection.prepareStatement("insert into emails values (null,?,?,?)");
-			ps2=this.connection.prepareStatement("select * from emails where date_scheduled=? and is_sent=?");
+			ps2=this.connection.prepareStatement("select * from emails where date_scheduled<=? and is_sent=?");
 			ps3=this.connection.prepareStatement("update emails set date_scheduled=? and is_sent=? where id_note=?");
 			ps4=this.connection.prepareStatement("delete from emails where id_note=?");
 			ps5=this.connection.prepareStatement("delete from emails where is_sent=?");
