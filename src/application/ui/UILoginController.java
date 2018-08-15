@@ -3,6 +3,8 @@ package application.ui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.model.User;
+import application.service.LoginService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,27 +40,25 @@ public class UILoginController implements Initializable
 	@FXML
 	public void handleLogin(ActionEvent event)
 	{
-		UIManager.instance.showScreen(buttonRegister, UIScreen.LISTSMENU);
-		UIManager.instance.setUserId(3);
-		/*if(!this.fieldUsername.getText().isEmpty() && !this.fieldPassword.getText().isEmpty())
+		if(!this.fieldUsername.getText().isEmpty() && !this.fieldPassword.getText().isEmpty())
 		{
 			User usr = LoginService.getInstance().login(this.fieldUsername.getText(), this.fieldPassword.getText()).orElse(null);
 			
 			if(usr != null)
 			{
-				this.showScreen(buttonRegister, UIScreen.LISTSMENU);
+				UIManager.instance.showScreen(buttonRegister, UIScreen.LISTSMENU);
 			}
 			else
 			{
-				this.labelLoginError.setText(this.ERROR_LOGINFAILED);
+				this.labelLoginError.setText(UIManager.ERROR_LOGINFAILED);
 				this.labelLoginError.setVisible(true);
 			}
 		}
 		else
 		{
-			this.labelLoginError.setText(this.ERROR_FILLOUTFIELDS);
+			this.labelLoginError.setText(UIManager.ERROR_FILLOUTFIELDS);
 			this.labelLoginError.setVisible(true);
-		}*/
+		}
 	}
 
 	@FXML
