@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.model.Note;
+import application.model.User;
+import application.service.LoginService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -165,7 +168,7 @@ public class UIController implements Initializable
 			newNoteRoot.setPrefSize(200, 150);
 			newNoteRoot.setMinWidth(paneListNotes.getPrefWidth());
 			
-			Text newNoteTitle = new Text(note.getTitle());		
+			/*Text newNoteTitle = new Text(note.getTitle());		
 			newNoteTitle.setLayoutY(39);
 			newNoteTitle.setFont(new Font("System", 36));
 			newNoteTitle.setFill(Paint.valueOf("#FFFFFF"));
@@ -177,16 +180,15 @@ public class UIController implements Initializable
 			newNoteDesc.setAlignment(Pos.TOP_LEFT);
 			newNoteDesc.setFont(new Font("System", 18));
 			newNoteDesc.setTextFill(Paint.valueOf("#FFFFFF"));
-			newNoteDesc.setWrapText(true);
+			newNoteDesc.setWrapText(true);*/
 			
 			Button editNote = createOptionButton(512, new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")));
 
 			
-			Button timerNote = createOptionButton(587, new Image(getClass().getResourceAsStream("/assets/icons8-safari-100.png")));
+			Button timerNote = createOptionButton(587, new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")));
 
 					
-			Button deleteNote = createOptionButton(664, new Image(getClass().getResourceAsStream("/assets/icons8-cancel-100.png")));
-			
+			Button deleteNote = createOptionButton(664, new Image(getClass().getResourceAsStream("/assets/icons8-cancel-100.png")));			
 			deleteNote.setOnAction(new EventHandler<ActionEvent>()
 			{
 				public void handle(ActionEvent event) 
@@ -196,7 +198,7 @@ public class UIController implements Initializable
 			});
 			
 			
-			newNoteRoot.getChildren().addAll(newNoteTitle, newNoteDesc, editNote, timerNote, deleteNote);
+			newNoteRoot.getChildren().addAll( editNote, timerNote, deleteNote); //newNoteTitle, newNoteDesc
 			this.paneListNotes.getChildren().add(newNoteRoot);
 		}
 		catch(Exception e)
@@ -252,14 +254,15 @@ public class UIController implements Initializable
 	@FXML
 	public void handleLogin(ActionEvent event)
 	{
-		/** TODO Verify if the account exists and if the password is correct */
-		this.showScreen(buttonLogin, UIScreen.LISTSMENU);			
+		Optional<User> usr = LoginService.getInstance().login(this.fieldUsername.getText(), this.fieldPassword.getText());
+
+		usr.ifPresent(x -> this.showScreen(buttonLogin, UIScreen.LISTSMENU));	
 	}
 	
 	@FXML
 	public void handleConfirmRegistration(ActionEvent event)
 	{
-
+		
 	}
 	
 	@FXML
