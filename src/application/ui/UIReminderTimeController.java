@@ -2,21 +2,24 @@ package application.ui;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import application.model.Email;
+import application.service.EmailsService;
+import application.service.NotesService;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -27,6 +30,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class UIReminderTimeController implements Initializable
@@ -52,33 +56,21 @@ public class UIReminderTimeController implements Initializable
 	
 	public void initialize(URL location, ResourceBundle resources) 
 	{		
-/*		timePickerReminderDate.setValue(LocalDate.now());
-
-		Callback<DatePicker, DateCell> dayCellFactory = (final DatePicker datePicker) -> new DateCell() 
-		{
-		    public void updateItem(LocalDate item, boolean empty) 
-		    {
-		        super.updateItem(item, empty);
-		        if (item.isBefore(LocalDate.now())) //Disable all dates after required date
-		        {
-		            setDisable(true);
-		            setStyle("-fx-background-color: #ffc0cb;"); //To set background on different color
-		        }
-		    }
-		};
-		
-		timePickerReminderDate.setDayCellFactory(dayCellFactory);*/
+		loadSavedReminders();
 	}
 	
-    @FXML
-    void handleAddNewReminder(ActionEvent event) 
-    {
+	private void loadSavedReminders()
+	{
+		List<Email> unsentMails = EmailsService.getInstance().getUnsentEmails();
 
-    }
-
-    @FXML
-    void handleCreateNewReminder(ActionEvent event) 
-    {
+		for(Email e : unsentMails)
+		{
+			createNewReminder(e);
+		}		
+	}
+	
+	private void createNewReminder(Email mail)
+	{
 		try
 		{
 			Pane newReminderRoot = new Pane();
@@ -109,7 +101,7 @@ public class UIReminderTimeController implements Initializable
 			reminderDatePicker.setPrefSize(136, 25);
 			reminderDatePicker.setLayoutX(14);
 			reminderDatePicker.setLayoutY(41);
-			reminderDatePicker.setValue(LocalDate.now());
+			reminderDatePicker.setValue(mail.getDate_scheduled() != null  ? mail.getDate_scheduled().toLocalDate() : LocalDate.now());
 			Callback<DatePicker, DateCell> dayCellFactory = (final DatePicker datePicker) -> new DateCell() 
 			{
 			    public void updateItem(LocalDate item, boolean empty) 
@@ -129,18 +121,55 @@ public class UIReminderTimeController implements Initializable
 			reminderTimePicker.setLayoutX(175);
 			reminderTimePicker.setLayoutY(41);
 			reminderTimePicker.setAlignment(Pos.CENTER);
+			System.out.println(mail.getDate_scheduled() != null ? mail.getDate_scheduled().getHour() + ":" + mail.getDate_scheduled().getMinute() : "as");
+			reminderTimePicker.setText(mail.getDate_scheduled() != null ? mail.getDate_scheduled().getHour() + ":" + mail.getDate_scheduled().getMinute() : "");
 			reminderTimePicker.setPromptText("HH:MM");
 			
 			controlShadow.setSpread(0);
 			
 			ImageView reminderSetImage = new ImageView();
 			reminderSetImage.setPreserveRatio(true);
-			Button reminderSet = UIManager.instance.createButtonWithImage(310, 10, new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")), 76, 64, reminderSetImage, 58, 53);			
+			Image imgForReminder = mail.getDate_scheduled() != null ? new Image(getClass().getResourceAsStream("/assets/icons8-stop-100.png")) : new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png"));
+			Button reminderSet = UIManager.instance.createButtonWithImage(310, 10, imgForReminder, 76, 64, reminderSetImage, 58, 53);			
 			reminderSet.setOnAction(new EventHandler<ActionEvent>()
 			{
 				public void handle(ActionEvent event) 
 				{
-					
+					if(mail.getDate_scheduled() != null)
+					{
+						int year = reminderDatePicker.getValue().getYear();
+						int month = reminderDatePicker.getValue().getMonthValue();
+						int dayOfMonth = reminderDatePicker.getValue().getDayOfMonth();
+						
+						String unparsedTime = reminderTimePicker.getText();
+											
+						if(unparsedTime.length() == 5)
+						{
+							
+							String firstHalf = unparsedTime.substring(0, 2);
+							String secondHalf = unparsedTime.substring(3, unparsedTime.length());
+													
+							int hour = Integer.parseInt(firstHalf);
+							int minute = Integer.parseInt(secondHalf);
+							
+							if(hour < 24 && minute < 60)
+							{									
+								mail.setDate_scheduled(LocalDateTime.of(year, month, dayOfMonth, hour, minute, 0));
+	
+								NotesService.getInstance().createReminder(UIManager.instance.getNoteForReminder().getId(), mail.getDate_scheduled());	
+								
+								reminderSetImage.setImage(new Image(getClass().getResourceAsStream("/assets/icons8-stop-100.png")));
+								paneListsMenu.getChildren().remove(newReminderRoot);
+								loadSavedReminders();
+							}
+						}
+					}
+					else
+					{
+						EmailsService.getInstance().updateEmails(mail.getDate_scheduled(), true, UIManager.instance.getNoteForReminder().getId());
+						EmailsService.getInstance().deleteEmails();
+						paneListsMenu.getChildren().remove(newReminderRoot);
+					}
 				}	
 			});	
 			reminderSet.setEffect(controlShadow);
@@ -152,6 +181,23 @@ public class UIReminderTimeController implements Initializable
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
+		}		
+	}
+
+    @FXML
+    void handleCreateNewReminder(ActionEvent event) 
+    {
+    	Email newMail = new Email();
+    	
+    	newMail.setId_note(UIManager.instance.getNoteForReminder().getId());
+    	
+    	this.createNewReminder(newMail);
     }
+    
+    @FXML
+    void handleCancel(ActionEvent event) 
+    {
+    	((Stage)((Control)event.getSource()).getScene().getWindow()).close();
+    }
+
 }

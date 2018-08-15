@@ -31,7 +31,7 @@ public class UIManager
     	this.currentlySelectedNote = note;
     }
     
-    public Note getNoteForReminder(Note note)
+    public Note getNoteForReminder()
     {
     	return this.currentlySelectedNote;
     }

@@ -37,7 +37,7 @@ public class EmailsService {
 	public static EmailsService getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
-	
+
 	public void sendEmail(int id) {
 
 		NoteDao noteDao = new NoteDao(con);

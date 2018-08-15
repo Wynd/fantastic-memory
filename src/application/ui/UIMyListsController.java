@@ -234,12 +234,14 @@ public class UIMyListsController implements Initializable
 					if(!newNoteTitle.getText().equalsIgnoreCase(noteTitleEdit.getText()))
 					{
 						newNoteTitle.setText(noteTitleEdit.getText());
+						note.setTitle(noteTitleEdit.getText());
 						NotesService.getInstance().changeNote(note);
 					}
 					
 					if(!newNoteDesc.getText().equalsIgnoreCase(noteDescEdit.getText()))
 					{
 						newNoteDesc.setText(noteDescEdit.getText());
+						note.setMessage(noteDescEdit.getText());
 						NotesService.getInstance().changeNote(note);
 					}
 				}	
@@ -252,6 +254,7 @@ public class UIMyListsController implements Initializable
 			{
 				public void handle(ActionEvent event) 
 				{
+					UIManager.instance.setNoteForReminder(note);
 			        Parent root;
 			        try 
 			        {
