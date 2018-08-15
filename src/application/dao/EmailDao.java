@@ -14,7 +14,7 @@ import application.model.Email;
 public class EmailDao {
 
 	private Connection connection;
-    PreparedStatement ps1,ps2,ps3,ps4,ps5;
+    PreparedStatement ps1,ps2,ps3,ps4,ps5,ps6;
     
     public EmailDao(Connection connection) {	
 		this.connection=connection;
@@ -24,6 +24,7 @@ public class EmailDao {
 			ps3=this.connection.prepareStatement("update emails set date_scheduled=?, is_sent=? where id_note=?");
 			ps4=this.connection.prepareStatement("delete from emails where id_note=?");
 			ps5=this.connection.prepareStatement("delete from emails where is_sent=?");
+			ps6=this.connection.prepareStatement("select * from emails where id_note=? and is_sent=?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -54,7 +55,8 @@ public class EmailDao {
     		 while(rs.next()){
 	            
     			 int id=rs.getInt(1);
-	             int id_note=rs.getInt(1);
+	             int id_note=rs.getInt(2);
+	             date_scheduled=(LocalDateTime)rs.getObject(3);
 	             Email email=new Email();
 	             email.setId(id);
 	             email.setId_note(id_note);
@@ -105,4 +107,31 @@ public class EmailDao {
 			e.printStackTrace();
 		}
     }
+ public List<Email> returnEmailforANote(int id_note,boolean is_sent){
+ 	
+ 	List<Email> emails=new ArrayList<>();
+ 	try {
+ 		
+ 		ps6.setInt(1, id_note);
+ 		ps6.setBoolean(2, is_sent);
+ 		ResultSet rs=ps6.executeQuery();
+ 		 while(rs.next()){
+	            
+ 			     int id=rs.getInt(1);
+	             LocalDateTime date_scheduled=(LocalDateTime)rs.getObject(2);
+	             Email email=new Email();
+	             email.setId(id);
+	             email.setId_note(id_note);
+	             email.setDate_scheduled(date_scheduled);
+	             email.setIs_sent(is_sent);
+	             emails.add(email);
+	            
+	         }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+ 	
+ 	return emails;
+ 	
+ }
 }

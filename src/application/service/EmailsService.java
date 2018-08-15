@@ -81,4 +81,11 @@ public class EmailsService {
 	public void stopEmailAction(ScheduledExecutorService service) {
 		service.shutdown();
 	}
+	public List<Email> getUnsentEmailsForANote(int id_note) {
+
+		EmailDao emailDao = new EmailDao(con);
+		return emailDao.returnEmailforANote(id_note, false);
+	}
+
+	
 }

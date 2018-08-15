@@ -135,7 +135,7 @@ public class UIReminderTimeController implements Initializable
 			{
 				public void handle(ActionEvent event) 
 				{
-					if(mail.getDate_scheduled() != null)
+					if(mail.getDate_scheduled() == null)
 					{
 						int year = reminderDatePicker.getValue().getYear();
 						int month = reminderDatePicker.getValue().getMonthValue();
