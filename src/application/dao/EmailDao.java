@@ -57,7 +57,8 @@ public class EmailDao {
 	            
     			 int id=rs.getInt(1);
 	             int id_note=rs.getInt(2);
-	             date_scheduled=(LocalDateTime)rs.getObject(3);
+	             Timestamp date = rs.getTimestamp(3);
+	             date_scheduled=date.toLocalDateTime();
 	             Email email=new Email();
 	             email.setId(id);
 	             email.setId_note(id_note);
@@ -74,12 +75,12 @@ public class EmailDao {
     	
     }
     
-    public void updateEmail(LocalDateTime date_scheduled,boolean is_sent,int id_date) {
+    public void updateEmail(LocalDateTime date_scheduled,boolean is_sent,int id_note) {
     	
     	try {
     		ps3.setObject(1, date_scheduled);
     		ps3.setBoolean(2, is_sent);
-    		ps3.setInt(3, id_date);
+    		ps3.setInt(3, id_note);
     	
     		ps3.executeUpdate();
 		} catch (SQLException e) {

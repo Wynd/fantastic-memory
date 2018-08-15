@@ -48,7 +48,7 @@ public class EmailsService {
 			if (user.isPresent()) {
 				String email = user.get().getEmail();
 				String title = "Reminder";
-				String message = "Dear " + user.get().getUsername() + " " + "\nDo not forget about the "
+				String message = "Dear " + user.get().getUsername() + "," + "\n\n\ndo not forget about the "
 						+ note.get().getTitle() + " from your list!";
 				SendEmail sendEmail = new SendEmail(email, title, message);
 			}
@@ -75,7 +75,8 @@ public class EmailsService {
 	}
 
 	public void emailAction(ScheduledExecutorService service) {
-		service.schedule(new EmailRunnable(), 1, TimeUnit.MINUTES);
+		//service.schedule(new EmailRunnable(), 1, TimeUnit.MINUTES);
+		service.scheduleAtFixedRate(new EmailRunnable(),3,59,TimeUnit.SECONDS);
 	}
 
 	public void stopEmailAction(ScheduledExecutorService service) {

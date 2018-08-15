@@ -13,6 +13,7 @@ public class EmailRunnable implements Runnable {
 		List<Email> list = es.getUnsentEmails();
 		for (Email e : list) {
 			es.sendEmail(e.getId());
+			es.updateEmails(e.getDate_scheduled(), true, e.getId_note());
 		}
 		es.deleteEmails();
 
