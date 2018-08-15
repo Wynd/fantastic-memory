@@ -1,15 +1,22 @@
 package application.service;
 
+import java.net.Proxy.Type;
 import java.sql.Connection;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import application.dao.EmailDao;
 import application.dao.NoteDao;
 import application.dao.UserDao;
+import application.model.Email;
 import application.model.Note;
 import application.model.SendEmail;
 import application.model.User;
+import application.runnable.EmailRunnable;
 
 public class EmailsService {
 	
@@ -58,5 +65,17 @@ public class EmailsService {
 		 emailDao.updateEmail(date_scheduled, is_sent, id_note);
 		 
 	 }
+	 
+	 public List<Email> getUnsentEmails(){
+		 
+		 EmailDao emailDao=new EmailDao(con);
+		return emailDao.returnEmail(LocalDateTime.now(), false);
+	 }
 
+	 public void emailAction(ScheduledExecutorService service) {
+		 service.schedule(new EmailRunnable(), 1, TimeUnit.MINUTES);
+	 }
+	 public void stopEmailAction(ScheduledExecutorService service) {
+		 service.shutdown();
+	 }
 }
