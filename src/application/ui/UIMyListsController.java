@@ -6,9 +6,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import application.model.Note;
 import application.model.Type;
+import application.service.EmailsService;
 import application.service.NotesService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -39,6 +42,7 @@ import javafx.stage.Stage;
 
 public class UIMyListsController implements Initializable
 {
+	public static ScheduledExecutorService service=Executors.newSingleThreadScheduledExecutor();
 
     @FXML
     private VBox paneListsMenu, paneListNotes;
@@ -101,7 +105,9 @@ public class UIMyListsController implements Initializable
 		});
 		mainMenuButtons.put(logout, new EventHandler<ActionEvent>() 
 		{
-            public void handle(ActionEvent e) { UIManager.instance.showScreen(((Control)e.getSource()), UIScreen.LOGIN); }
+            public void handle(ActionEvent e) { UIManager.instance.showScreen(((Control)e.getSource()), UIScreen.LOGIN);
+                                                EmailsService emailService=new EmailsService();
+    		                                     emailService.stopEmailAction(service);}
 		});
 		mainMenuButtons.put(quit, new EventHandler<ActionEvent>() 
 		{
@@ -145,6 +151,8 @@ public class UIMyListsController implements Initializable
 		});
 				
 		initButtons(mainMenuButtons);
+		EmailsService emailService=new EmailsService();
+		emailService.emailAction(service);
 	}
 	
 	private void initButtons(LinkedHashMap<Button, EventHandler<ActionEvent>> list) 

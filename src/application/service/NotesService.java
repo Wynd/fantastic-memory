@@ -69,7 +69,7 @@ public class NotesService {
 		int id_date = note.getId_date();
 
 		DateDao dateDao = new DateDao(con);
-		dateDao.deleteDate(id_date);
+		dateDao.updateDate(LocalDateTime.now(), id_date);
 	}
 
 	public void createReminder(int id_note, LocalDateTime date_scheduled) {
