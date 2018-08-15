@@ -26,10 +26,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -180,11 +182,20 @@ public class UIMyListsController implements Initializable
 			newNoteRoot.setPrefSize(200, 150);
 			newNoteRoot.setMinWidth(paneListNotes.getPrefWidth());
 			
+			DropShadow controlShadow = new DropShadow();
+			controlShadow.setWidth(6);
+			controlShadow.setHeight(6);
+			controlShadow.setOffsetY(1.0f);
+			controlShadow.setOffsetX(1.0f);
+			controlShadow.setSpread(0.2f);
+			controlShadow.setColor(Color.BLACK);
+			
 			Text newNoteTitle = new Text(note.getTitle());		
 			newNoteTitle.setLayoutY(39);
 			newNoteTitle.setFont(new Font("System", 36));
 			newNoteTitle.setFill(Paint.valueOf("#FFFFFF"));
 			newNoteTitle.setWrappingWidth(730);
+			newNoteTitle.setEffect(controlShadow);
 			
 			Label newNoteDesc = new Label(note.getMessage());	
 			newNoteDesc.setPrefSize(500, 90);
@@ -193,6 +204,7 @@ public class UIMyListsController implements Initializable
 			newNoteDesc.setFont(new Font("System", 18));
 			newNoteDesc.setTextFill(Paint.valueOf("#FFFFFF"));
 			newNoteDesc.setWrapText(true);
+			newNoteDesc.setEffect(controlShadow);
 			
 			TextField noteTitleEdit = new TextField(note.getTitle());
 			noteTitleEdit.setPrefSize(725, 50);
@@ -246,6 +258,7 @@ public class UIMyListsController implements Initializable
 					}
 				}	
 			});
+			editNote.setEffect(controlShadow);
 			
 			ImageView timerNoteImage = new ImageView();
 			timerNoteImage.setPreserveRatio(true);
@@ -271,6 +284,7 @@ public class UIMyListsController implements Initializable
 			        }
 				}
 			});	
+			timerNote.setEffect(controlShadow);
 			
 			ImageView deleteNoteImage = new ImageView();
 			deleteNoteImage.setPreserveRatio(true);
@@ -282,7 +296,8 @@ public class UIMyListsController implements Initializable
 					paneListNotes.getChildren().remove(newNoteRoot);
 					NotesService.getInstance().deleteNote(note.getId());
 				}	
-			});			
+			});		
+			deleteNote.setEffect(controlShadow);
 			
 			newNoteRoot.getChildren().addAll(newNoteTitle, noteTitleEdit, newNoteDesc, noteDescEdit, editNote, timerNote, deleteNote);
 			this.paneListNotes.getChildren().add(0, newNoteRoot);
@@ -391,6 +406,7 @@ public class UIMyListsController implements Initializable
 		note.setMessage("Example Message");
 		note.setId_type(UIManager.instance.getTypeForNotes());
 		
+		paneListNotes.getChildren().removeAll(paneListNotes.getChildren());
 		NotesService.getInstance().addNote(UIManager.instance.getUserId(), note.getTitle(), note.getMessage(), UIManager.instance.getTypeForNotes(), false);
 		loadSavedNotes();
 	}

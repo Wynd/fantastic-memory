@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +119,8 @@ public class EmailDao {
  		 while(rs.next()){
 	            
  			     int id=rs.getInt(1);
-	             LocalDateTime date_scheduled=(LocalDateTime)rs.getObject(2);
+ 			     Timestamp date = rs.getTimestamp(3);
+	             LocalDateTime date_scheduled=date.toLocalDateTime();
 	             Email email=new Email();
 	             email.setId(id);
 	             email.setId_note(id_note);

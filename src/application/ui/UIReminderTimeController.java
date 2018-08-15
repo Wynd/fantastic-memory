@@ -61,7 +61,7 @@ public class UIReminderTimeController implements Initializable
 	
 	private void loadSavedReminders()
 	{
-		List<Email> unsentMails = EmailsService.getInstance().getUnsentEmails();
+		List<Email> unsentMails = EmailsService.getInstance().getUnsentEmailsForANote(UIManager.instance.getNoteForReminder().getId());
 				
 		for(Email e : unsentMails)
 		{
@@ -101,7 +101,7 @@ public class UIReminderTimeController implements Initializable
 			reminderDatePicker.setPrefSize(136, 25);
 			reminderDatePicker.setLayoutX(14);
 			reminderDatePicker.setLayoutY(41);
-			//reminderDatePicker.setValue(mail.getDate_scheduled() != null  ? mail.getDate_scheduled().toLocalDate() : LocalDate.now());
+			reminderDatePicker.setValue(mail.getDate_scheduled() != null  ? mail.getDate_scheduled().toLocalDate() : LocalDate.now());
 			Callback<DatePicker, DateCell> dayCellFactory = (final DatePicker datePicker) -> new DateCell() 
 			{
 			    public void updateItem(LocalDate item, boolean empty) 
@@ -121,7 +121,7 @@ public class UIReminderTimeController implements Initializable
 			reminderTimePicker.setLayoutX(175);
 			reminderTimePicker.setLayoutY(41);
 			reminderTimePicker.setAlignment(Pos.CENTER);
-			//reminderTimePicker.setText(mail.getDate_scheduled() != null ? mail.getDate_scheduled().getHour() + ":" + mail.getDate_scheduled().getMinute() : "");
+			reminderTimePicker.setText(mail.getDate_scheduled() != null ? mail.getDate_scheduled().getHour() + ":" + mail.getDate_scheduled().getMinute() : "");
 			reminderTimePicker.setPromptText("HH:MM");
 			
 			controlShadow.setSpread(0);
