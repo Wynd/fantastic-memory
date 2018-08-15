@@ -47,6 +47,7 @@ public class UILoginController implements Initializable
 			if(usr != null)
 			{
 				UIManager.instance.showScreen(buttonRegister, UIScreen.LISTSMENU);
+				UIManager.instance.setUserId(usr.getId());
 			}
 			else
 			{

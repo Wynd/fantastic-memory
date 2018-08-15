@@ -31,3 +31,8 @@
 	-fx-border-color: #44A3D1;
 	-fx-background-color: #44A3D1;
 }
+
+.checkbox
+{
+    -fx-background-color: transparent;
+}

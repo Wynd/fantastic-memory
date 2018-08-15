@@ -4,8 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Map.Entry;
+import java.util.ResourceBundle;
 
 import application.model.Note;
 import application.model.Type;
@@ -17,7 +17,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,9 +25,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -97,7 +98,23 @@ public class UIMyListsController implements Initializable
 		});
 		mainMenuButtons.put(about, new EventHandler<ActionEvent>() 
 		{
-            public void handle(ActionEvent e) { /** TODO add About page handling */ }
+            public void handle(ActionEvent e) 
+            { 
+		        Parent root;
+		        try 
+		        {
+		            root = FXMLLoader.load(getClass().getResource("UIAbout.fxml"));
+		            Stage stage = new Stage();
+		            stage.getIcons().add(new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")));
+		            stage.setTitle("About");
+		            stage.setScene(new Scene(root));
+		            stage.show();          
+		        }
+		        catch (Exception ex) 
+		        {
+		            ex.printStackTrace();
+		        }
+            }
 		});
 		mainMenuButtons.put(logout, new EventHandler<ActionEvent>() 
 		{
@@ -171,13 +188,14 @@ public class UIMyListsController implements Initializable
 		}		
 	}
 	
+	/**
+	 * @param note
+	 */
 	private void addNoteInList(Note note)
 	{
 		try
 		{
-			
-			/** TODO Add checkbox for each item, also link it for database changes */
-			
+
 			Pane newNoteRoot = new Pane();			
 			newNoteRoot.setPrefSize(200, 150);
 			newNoteRoot.setMinWidth(paneListNotes.getPrefWidth());
@@ -190,12 +208,13 @@ public class UIMyListsController implements Initializable
 			controlShadow.setSpread(0.2f);
 			controlShadow.setColor(Color.BLACK);
 			
-			Text newNoteTitle = new Text(note.getTitle());		
-			newNoteTitle.setLayoutY(39);
+			Label newNoteTitle = new Label(note.getTitle());	
+			newNoteTitle.setLayoutX(70);
 			newNoteTitle.setFont(new Font("System", 36));
-			newNoteTitle.setFill(Paint.valueOf("#FFFFFF"));
-			newNoteTitle.setWrappingWidth(730);
+			newNoteTitle.setTextFill(Paint.valueOf("#FFFFFF"));
+			newNoteTitle.setWrapText(false);
 			newNoteTitle.setEffect(controlShadow);
+			newNoteTitle.setStyle(note.isChecked() ? "-fx-strikethrough: true;" : "");
 			
 			Label newNoteDesc = new Label(note.getMessage());	
 			newNoteDesc.setPrefSize(500, 90);
@@ -205,6 +224,47 @@ public class UIMyListsController implements Initializable
 			newNoteDesc.setTextFill(Paint.valueOf("#FFFFFF"));
 			newNoteDesc.setWrapText(true);
 			newNoteDesc.setEffect(controlShadow);
+			
+			ToggleButton noteCheck = new ToggleButton();
+			noteCheck.setLayoutY(5);
+			noteCheck.setPrefSize(50, 45);
+			noteCheck.getStyleClass().clear();
+			noteCheck.getStyleClass().add("checkbox");
+			noteCheck.setSelected(note.isChecked());
+			ImageView noteCheckImg = new ImageView();
+			noteCheckImg.setFitWidth(50);
+			noteCheckImg.setFitHeight(45);
+			noteCheckImg.setPreserveRatio(true);
+			Image imgForCheck = note.isChecked() ? new Image(getClass().getResourceAsStream("/assets/icons8-tick-box-100.png")) : new Image(getClass().getResourceAsStream("/assets/icons8-unchecked-checkbox-100.png"));
+			try
+			{
+				noteCheckImg.setImage(imgForCheck);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			noteCheck.setGraphic(noteCheckImg);
+			noteCheck.setOnAction(new EventHandler<ActionEvent>()
+			{
+				public void handle(ActionEvent event) 
+				{
+					try
+					{
+						Image imgForCheck = noteCheck.isSelected() ? new Image(getClass().getResourceAsStream("/assets/icons8-tick-box-100.png")) : new Image(getClass().getResourceAsStream("/assets/icons8-unchecked-checkbox-100.png"));
+						noteCheckImg.setImage(imgForCheck);
+						noteCheck.setGraphic(noteCheckImg);
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+					
+					note.setChecked(noteCheck.isSelected());
+					newNoteTitle.setStyle(note.isChecked() ? "-fx-strikethrough: true;" : "");
+					NotesService.getInstance().changeNote(note);
+				}				
+			});
 			
 			TextField noteTitleEdit = new TextField(note.getTitle());
 			noteTitleEdit.setPrefSize(725, 50);
@@ -227,6 +287,7 @@ public class UIMyListsController implements Initializable
 				{
 					newNoteTitle.setVisible(!newNoteTitle.isVisible());
 					newNoteDesc.setVisible(!newNoteDesc.isVisible());
+					noteCheck.setVisible(!noteCheck.isVisible());
 					
 					noteTitleEdit.setVisible(!noteTitleEdit.isVisible());
 					noteDescEdit.setVisible(!noteDescEdit.isVisible());
@@ -299,7 +360,7 @@ public class UIMyListsController implements Initializable
 			});		
 			deleteNote.setEffect(controlShadow);
 			
-			newNoteRoot.getChildren().addAll(newNoteTitle, noteTitleEdit, newNoteDesc, noteDescEdit, editNote, timerNote, deleteNote);
+			newNoteRoot.getChildren().addAll(newNoteTitle, noteTitleEdit, noteCheck, newNoteDesc, noteDescEdit, editNote, timerNote, deleteNote);
 			this.paneListNotes.getChildren().add(0, newNoteRoot);
 			
 		}
