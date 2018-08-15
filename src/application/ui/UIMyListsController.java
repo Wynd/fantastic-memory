@@ -214,7 +214,16 @@ public class UIMyListsController implements Initializable
 			newNoteTitle.setTextFill(Paint.valueOf("#FFFFFF"));
 			newNoteTitle.setWrapText(false);
 			newNoteTitle.setEffect(controlShadow);
-			newNoteTitle.setStyle(note.isChecked() ? "-fx-strikethrough: true;" : "");
+			if(note.isChecked())
+			{
+				newNoteTitle.setTextFill(Paint.valueOf("#FFC325"));
+				newNoteTitle.setUnderline(true);
+			}
+			else
+			{
+				newNoteTitle.setTextFill(Paint.valueOf("#FFFFFF"));
+				newNoteTitle.setUnderline(false);
+			}
 			
 			Label newNoteDesc = new Label(note.getMessage());	
 			newNoteDesc.setPrefSize(500, 90);
@@ -261,7 +270,17 @@ public class UIMyListsController implements Initializable
 					}
 					
 					note.setChecked(noteCheck.isSelected());
-					newNoteTitle.setStyle(note.isChecked() ? "-fx-strikethrough: true;" : "");
+					if(note.isChecked())
+					{
+						newNoteTitle.setTextFill(Paint.valueOf("#FFC325"));
+						newNoteTitle.setUnderline(true);
+					}
+					else
+					{
+						newNoteTitle.setTextFill(Paint.valueOf("#FFFFFF"));
+						newNoteTitle.setUnderline(false);
+					}
+					
 					NotesService.getInstance().changeNote(note);
 				}				
 			});

@@ -1,6 +1,6 @@
 /*
- *  #44A3D1 - BLUE
- * 	#97C145 - GREEN
+ *	#44A3D1 - BLUE
+ *	#97C145 - GREEN
  */
 
 .button
@@ -30,9 +30,4 @@
 	-fx-background: #44A3D1;
 	-fx-border-color: #44A3D1;
 	-fx-background-color: #44A3D1;
-}
-
-.checkbox
-{
-    -fx-background-color: transparent;
 }
