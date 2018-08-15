@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import application.dao.DateDao;
+import application.dao.EmailDao;
 import application.dao.UserDao;
 import application.model.User;
 
@@ -103,6 +104,8 @@ public class LoginService {
 		                 if(op.isPresent()&&op.get().getPassword().equals(oldPassword)){
 		                       newPassword=cryptWithMD5(newPassword);
 		                       userDao.updatePassword(username, newPassword);
+		                       DateDao datelDao=new DateDao(con);
+		  				     datelDao.updateDate(LocalDateTime.now(), op.get().getId_date());
 		                 }
 		        }catch (SQLException e){
 		                e.printStackTrace();
@@ -114,6 +117,17 @@ public class LoginService {
 	    	
 	    	 UserDao userDao=new UserDao(con);
 		     userDao.updateEmail(username, email);
+		     Optional<User> user;
+			try {
+				user = userDao.findUser(username);
+				 if(user.isPresent()) {
+				     DateDao datelDao=new DateDao(con);
+				     datelDao.updateDate(LocalDateTime.now(), user.get().getId_date());}
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		    
 		           
 		 }
 }

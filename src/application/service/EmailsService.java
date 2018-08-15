@@ -1,8 +1,10 @@
 package application.service;
 
 import java.sql.Connection;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+import application.dao.EmailDao;
 import application.dao.NoteDao;
 import application.dao.UserDao;
 import application.model.Note;
@@ -43,6 +45,18 @@ public class EmailsService {
 		 }
 			 
 			  
+	 }
+	 
+	 public void deleteEmails() {
+		 
+		 EmailDao emailDao=new EmailDao(con);
+		 emailDao.deleteSentEmail();
+	 }
+	 
+	 public void updateEmails(LocalDateTime date_scheduled,boolean is_sent,int id_note) {
+		 EmailDao emailDao=new EmailDao(con);
+		 emailDao.updateEmail(date_scheduled, is_sent, id_note);
+		 
 	 }
 
 }

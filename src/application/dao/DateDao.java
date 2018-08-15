@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class DateDao {
 
 	private Connection connection;
-    PreparedStatement ps1,ps2,ps3;
+    PreparedStatement ps1,ps2,ps3,ps4;
     
     public DateDao(Connection connection) {	
 		this.connection=connection;
@@ -17,6 +17,7 @@ public class DateDao {
 			ps1=this.connection.prepareStatement("insert into dates values (null,?,?)");
 			ps2=this.connection.prepareStatement("update dates set updated_date=? where id=?");
 			ps3=this.connection.prepareStatement("select id from dates order by created_date desc");
+			ps4=this.connection.prepareStatement("delete from dates where id=?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -62,5 +63,18 @@ public class DateDao {
 			e.printStackTrace();
 		}
     	return id;
+    }
+    
+  public void deleteDate(int id) {
+    	
+    	try {
+			
+			
+			ps4.setInt(1, id);
+			ps4.executeUpdate();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
     }
 }
