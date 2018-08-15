@@ -4,7 +4,6 @@ public enum UIScreen
 {
 	LOGIN("UILogin", "Fantastic Memory - Login"), 
 	REGISTER("UIRegister", "Fantastic Memory - Registration"), 
-	GDPR("UIGDPR", "Fantastic Memory - GDPR"), 
 	LISTSMENU("UIMyLists", "Fantastic Memory - My Lists ");
 	
 	private String path;

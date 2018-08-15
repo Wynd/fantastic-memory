@@ -68,7 +68,7 @@ public class NotesService {
 	 
 	 
 	 public void createReminder(int id_note,LocalDateTime date_scheduled ) {
-		 
+
 		 EmailDao emailDao=new EmailDao(con);
 		 emailDao.addEmail(id_note, date_scheduled, false);
 		 

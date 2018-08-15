@@ -27,6 +27,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -67,6 +68,9 @@ public class UIController implements Initializable
     @FXML
     private ScrollPane scrollPaneNotes;
     
+    @FXML 
+    private Label labelLoginError, labelRegError;
+    
     // Buttons for the dynamic menus, these will be added based on which current menu the user has open, where the user will be able to choose between different types of lists
     private Button shoppingLists = new Button("Shopping Lists"), 
     			todoLists = new Button("To Do Lists"), 
@@ -74,6 +78,11 @@ public class UIController implements Initializable
     	    	quit = new Button("Quit"), 
     			backToMenu = new Button("Back To Menu");
 
+    private final String ERROR_FILLOUTFIELDS = "Please fill out all the fields";
+    private final String ERROR_LOGINFAILED = "Incorrect username or password";
+    private final String ERROR_DIFFERENTPASSWORD = "'Repeat Password' must match 'Password'";
+    private final String ERROR_ACCOUNTOWNED = "An account with this username already exists !";
+    
     // List with all the buttons "queued" to be added in the list, will get cleared each time a new set of buttons will be added
     private ArrayList<Button> buttonsToAdd = new ArrayList<Button>();
     
@@ -84,12 +93,11 @@ public class UIController implements Initializable
     private final LinkedHashMap<Button, EventHandler<ActionEvent>> shoppingListButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
     private final LinkedHashMap<Button, EventHandler<ActionEvent>> todoListButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
 
-    
 	public void initialize(URL url, ResourceBundle bundle) 
 	{
 		String fileName = url.getFile().substring(url.getFile().lastIndexOf('/') + 1, url.getFile().length() );
 		String uiName = fileName.substring(0, fileName.lastIndexOf('.'));
-		
+				
 		// Initializing the hashmaps with the corresponding buttons for each menu
 		mainMenuButtons.put(shoppingLists, new EventHandler<ActionEvent>() 
 		{
@@ -126,7 +134,15 @@ public class UIController implements Initializable
             public void handle(ActionEvent e) { handleCloseLists(e); }
 		});
 		
-		if(uiName.equalsIgnoreCase(UIScreen.LISTSMENU.getPath()))
+		if(uiName.equalsIgnoreCase(UIScreen.LOGIN.getPath()))
+		{
+			labelLoginError.setVisible(false);
+		}
+		else if(uiName.equalsIgnoreCase(UIScreen.REGISTER.getPath()))
+		{
+			labelRegError.setVisible(false);
+		}
+		else if(uiName.equalsIgnoreCase(UIScreen.LISTSMENU.getPath()))
 		{		
 			buttonAddNewNote.setVisible(false);
 			
@@ -168,7 +184,7 @@ public class UIController implements Initializable
 			newNoteRoot.setPrefSize(200, 150);
 			newNoteRoot.setMinWidth(paneListNotes.getPrefWidth());
 			
-			/*Text newNoteTitle = new Text(note.getTitle());		
+			Text newNoteTitle = new Text(note.getTitle());		
 			newNoteTitle.setLayoutY(39);
 			newNoteTitle.setFont(new Font("System", 36));
 			newNoteTitle.setFill(Paint.valueOf("#FFFFFF"));
@@ -180,25 +196,77 @@ public class UIController implements Initializable
 			newNoteDesc.setAlignment(Pos.TOP_LEFT);
 			newNoteDesc.setFont(new Font("System", 18));
 			newNoteDesc.setTextFill(Paint.valueOf("#FFFFFF"));
-			newNoteDesc.setWrapText(true);*/
+			newNoteDesc.setWrapText(true);
 			
-			Button editNote = createOptionButton(512, new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")));
-
+			TextField noteTitleEdit = new TextField(note.getTitle());
+			noteTitleEdit.setPrefSize(725, 50);
+			noteTitleEdit.setFont(new Font("System", 24));
 			
-			Button timerNote = createOptionButton(587, new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")));
+			TextArea noteDescEdit = new TextArea(note.getMessage());
+			noteDescEdit.setLayoutY(58);
+			noteDescEdit.setPrefSize(500, 85);
+			noteDescEdit.setFont(new Font("System", 14));
+			
+			noteTitleEdit.setVisible(false);
+			noteDescEdit.setVisible(false);
 
+			ImageView editNoteImage = new ImageView();
+			Button editNote = createOptionButton(512, new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")), editNoteImage);
+			editNote.setOnAction(new EventHandler<ActionEvent>()
+			{
+				public void handle(ActionEvent event) 
+				{
+					newNoteTitle.setVisible(!newNoteTitle.isVisible());
+					newNoteDesc.setVisible(!newNoteDesc.isVisible());
 					
-			Button deleteNote = createOptionButton(664, new Image(getClass().getResourceAsStream("/assets/icons8-cancel-100.png")));			
+					noteTitleEdit.setVisible(!noteTitleEdit.isVisible());
+					noteDescEdit.setVisible(!noteDescEdit.isVisible());
+					
+					if(newNoteTitle.isVisible())
+					{
+						try
+						{
+							editNoteImage.setImage(new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")));
+						}
+						catch(Exception e)
+						{
+							e.printStackTrace();
+						}
+					}
+					else
+					{
+						try
+						{
+							editNoteImage.setImage(new Image(getClass().getResourceAsStream("/assets/icons8-checkmark-100.png")));
+						}
+						catch(Exception e)
+						{
+							e.printStackTrace();
+						}					
+					}
+					
+					if(!newNoteTitle.getText().equalsIgnoreCase(noteTitleEdit.getText()))
+						newNoteTitle.setText(noteTitleEdit.getText());
+					
+					if(!newNoteDesc.getText().equalsIgnoreCase(noteDescEdit.getText()))
+						newNoteDesc.setText(noteDescEdit.getText());					
+				}	
+			});
+			
+			ImageView timerNoteImage = new ImageView();
+			Button timerNote = createOptionButton(587, new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")), timerNoteImage);
+			
+			ImageView deleteNoteImage = new ImageView();
+			Button deleteNote = createOptionButton(664, new Image(getClass().getResourceAsStream("/assets/icons8-cancel-100.png")), deleteNoteImage);			
 			deleteNote.setOnAction(new EventHandler<ActionEvent>()
 			{
 				public void handle(ActionEvent event) 
 				{
 					paneListNotes.getChildren().remove(newNoteRoot);
 				}	
-			});
+			});			
 			
-			
-			newNoteRoot.getChildren().addAll( editNote, timerNote, deleteNote); //newNoteTitle, newNoteDesc
+			newNoteRoot.getChildren().addAll(newNoteTitle, noteTitleEdit, newNoteDesc, noteDescEdit, editNote, timerNote, deleteNote); // noteTitleEdit, noteDescEdit
 			this.paneListNotes.getChildren().add(newNoteRoot);
 		}
 		catch(Exception e)
@@ -207,24 +275,23 @@ public class UIController implements Initializable
 		}
 	}
 
-	private Button createOptionButton(int posX, Image img)
+	private Button createOptionButton(int posX, Image img, ImageView genericImage)
 	{
 		Button genericBtn = new Button();
 		genericBtn.setPrefSize(55, 50);
 		genericBtn.setLayoutX(posX);
 		genericBtn.setLayoutY(70);
-		ImageView deleteNoteImage = new ImageView();
-		deleteNoteImage.setFitWidth(45);
-		deleteNoteImage.setFitHeight(50);
+		genericImage.setFitWidth(45);
+		genericImage.setFitHeight(50);
 		try
 		{
-			deleteNoteImage.setImage(img);
+			genericImage.setImage(img);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		genericBtn.setGraphic(deleteNoteImage);
+		genericBtn.setGraphic(genericImage);
 		
 		return genericBtn;
 	}
@@ -254,21 +321,63 @@ public class UIController implements Initializable
 	@FXML
 	public void handleLogin(ActionEvent event)
 	{
-		Optional<User> usr = LoginService.getInstance().login(this.fieldUsername.getText(), this.fieldPassword.getText());
-
-		usr.ifPresent(x -> this.showScreen(buttonLogin, UIScreen.LISTSMENU));	
+		this.showScreen(buttonRegister, UIScreen.LISTSMENU);
+		/*if(!this.fieldUsername.getText().isEmpty() && !this.fieldPassword.getText().isEmpty())
+		{
+			User usr = LoginService.getInstance().login(this.fieldUsername.getText(), this.fieldPassword.getText()).orElse(null);
+			
+			if(usr != null)
+			{
+				this.showScreen(buttonRegister, UIScreen.LISTSMENU);
+			}
+			else
+			{
+				this.labelLoginError.setText(this.ERROR_LOGINFAILED);
+				this.labelLoginError.setVisible(true);
+			}
+		}
+		else
+		{
+			this.labelLoginError.setText(this.ERROR_FILLOUTFIELDS);
+			this.labelLoginError.setVisible(true);
+		}*/
 	}
 	
 	@FXML
 	public void handleConfirmRegistration(ActionEvent event)
 	{
-		
+		if(!this.fieldUsername.getText().isEmpty() && !this.fieldPassword.getText().isEmpty() && !this.fieldPasswordRepeat.getText().isEmpty() && !this.fieldEmail.getText().isEmpty())
+		{
+			if(this.fieldPassword.getText().equalsIgnoreCase(this.fieldPasswordRepeat.getText()))
+			{
+				boolean reg = LoginService.getInstance().registration(this.fieldUsername.getText(), this.fieldPassword.getText(), this.fieldEmail.getText());
+				
+				if(reg)
+				{
+					this.showScreen(buttonConfirmRegister, UIScreen.LISTSMENU);
+				}
+				else
+				{
+					this.labelRegError.setText(this.ERROR_ACCOUNTOWNED);
+					this.labelRegError.setVisible(true);
+				}
+			}
+			else
+			{
+				this.labelRegError.setText(this.ERROR_DIFFERENTPASSWORD);
+				this.labelRegError.setVisible(true);
+			}
+		}
+		else
+		{
+			this.labelRegError.setText(this.ERROR_FILLOUTFIELDS);
+			this.labelRegError.setVisible(true);
+		}
 	}
 	
 	@FXML
 	public void handleOpenRegistrationForm(ActionEvent event)
 	{
-		/** TODO Send data for account creation */
 		this.showScreen(buttonRegister, UIScreen.REGISTER);	
 	}
 	
@@ -282,7 +391,7 @@ public class UIController implements Initializable
 	public void handleOpenShoppingLists(ActionEvent event)
 	{
 		((Stage) paneListsMenu.getScene().getWindow()).setTitle("Fantastic Memory - My Shopping Lists ");
-		
+
 		buttonAddNewNote.setVisible(true);
 		buttonsToAdd.clear();
 		initButtons(shoppingListButtons);	
