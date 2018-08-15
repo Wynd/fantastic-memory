@@ -15,14 +15,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -55,6 +61,9 @@ public class UIController implements Initializable
     @FXML
     private VBox paneListsMenu, paneListNotes;
     
+    @FXML
+    private ScrollPane scrollPaneNotes;
+    
     // Buttons for the dynamic menus, these will be added based on which current menu the user has open, where the user will be able to choose between different types of lists
     private Button shoppingLists = new Button("Shopping Lists"), 
     			todoLists = new Button("To Do Lists"), 
@@ -64,6 +73,9 @@ public class UIController implements Initializable
 
     // List with all the buttons "queued" to be added in the list, will get cleared each time a new set of buttons will be added
     private ArrayList<Button> buttonsToAdd = new ArrayList<Button>();
+    
+    // List with all the notes "queued" to be added in the list, will be filled with data from the DB when the UI is initialized
+    private ArrayList<Button> notesToAdd = new ArrayList<Button>();
     
     private final LinkedHashMap<Button, EventHandler<ActionEvent>> mainMenuButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
     private final LinkedHashMap<Button, EventHandler<ActionEvent>> shoppingListButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
@@ -145,24 +157,74 @@ public class UIController implements Initializable
 	}
 	
 	/** TODO Setup a pane with different controls for title, description, additional buttons */
-	private void addNote(Note note)
+	private void addNoteInList(Note note)
 	{
 		try
 		{
-			Button newNote = new Button(note.getTitle());
+			Pane newNoteRoot = new Pane();			
+			newNoteRoot.setPrefSize(200, 150);
+			newNoteRoot.setMinWidth(paneListNotes.getPrefWidth());
 			
-			newNote.setFont(new Font("System", 23));
-			newNote.setTextFill(Paint.valueOf("#FFFFFF"));
-			newNote.setPrefSize(740, 70);
-			newNote.setMinWidth(paneListsMenu.getPrefWidth());
-			newNote.setAlignment(Pos.CENTER_LEFT);
-								
-			this.paneListNotes.getChildren().add(newNote);
+			Text newNoteTitle = new Text(note.getTitle());		
+			newNoteTitle.setLayoutY(39);
+			newNoteTitle.setFont(new Font("System", 36));
+			newNoteTitle.setFill(Paint.valueOf("#FFFFFF"));
+			newNoteTitle.setWrappingWidth(730);
+			
+			Label newNoteDesc = new Label(note.getMessage());	
+			newNoteDesc.setPrefSize(500, 90);
+			newNoteDesc.setLayoutY(58);
+			newNoteDesc.setAlignment(Pos.TOP_LEFT);
+			newNoteDesc.setFont(new Font("System", 18));
+			newNoteDesc.setTextFill(Paint.valueOf("#FFFFFF"));
+			newNoteDesc.setWrapText(true);
+			
+			Button editNote = createOptionButton(512, new Image(getClass().getResourceAsStream("/assets/icons8-edit-100.png")));
+
+			
+			Button timerNote = createOptionButton(587, new Image(getClass().getResourceAsStream("/assets/icons8-safari-100.png")));
+
+					
+			Button deleteNote = createOptionButton(664, new Image(getClass().getResourceAsStream("/assets/icons8-cancel-100.png")));
+			
+			deleteNote.setOnAction(new EventHandler<ActionEvent>()
+			{
+				public void handle(ActionEvent event) 
+				{
+					paneListNotes.getChildren().remove(newNoteRoot);
+				}	
+			});
+			
+			
+			newNoteRoot.getChildren().addAll(newNoteTitle, newNoteDesc, editNote, timerNote, deleteNote);
+			this.paneListNotes.getChildren().add(newNoteRoot);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private Button createOptionButton(int posX, Image img)
+	{
+		Button genericBtn = new Button();
+		genericBtn.setPrefSize(55, 50);
+		genericBtn.setLayoutX(posX);
+		genericBtn.setLayoutY(70);
+		ImageView deleteNoteImage = new ImageView();
+		deleteNoteImage.setFitWidth(45);
+		deleteNoteImage.setFitHeight(50);
+		try
+		{
+			deleteNoteImage.setImage(img);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		genericBtn.setGraphic(deleteNoteImage);
+		
+		return genericBtn;
 	}
 	
 	public void showScreen(Control child, UIScreen ui)
@@ -253,12 +315,11 @@ public class UIController implements Initializable
 	public void handleAddNewNote(ActionEvent event)
 	{
 		Note note = new Note();
-		
-		note.setId(1);
+
 		note.setTitle("Example Note");
 		note.setMessage("Example Message");
 		
-		this.addNote(note);
+		this.addNoteInList(note);
 	}
 	
 	@FXML
