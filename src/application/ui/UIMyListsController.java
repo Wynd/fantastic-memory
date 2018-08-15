@@ -2,15 +2,11 @@ package application.ui;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import application.model.Note;
-import application.model.User;
-import application.service.LoginService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,15 +19,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -39,49 +32,30 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class UIController implements Initializable
+public class UIMyListsController implements Initializable
 {
-
-	public static UIController instance = new UIController();
-	
-    @FXML
-    private AnchorPane paneLoginRoot;
-	
-    @FXML
-    private TextField fieldUsername, fieldEmail;
-
-    @FXML
-    private PasswordField fieldPassword, fieldPasswordRepeat;
-
-    @FXML
-    private Hyperlink hyperlinkPasswordRevovery;
-    
-    @FXML
-    private Button buttonLogin, buttonRegister, buttonCancelRegister, buttonConfirmRegister, buttonAddNewNote;
-
-    @FXML
-    private Text labelMyListsTitle, labelListTitle;
 
     @FXML
     private VBox paneListsMenu, paneListNotes;
-    
+
     @FXML
     private ScrollPane scrollPaneNotes;
-    
-    @FXML 
-    private Label labelLoginError, labelRegError;
-    
+
+    @FXML
+    private Text labelListTitle;
+
+    @FXML
+    private Button buttonAddNewNote;
+	
     // Buttons for the dynamic menus, these will be added based on which current menu the user has open, where the user will be able to choose between different types of lists
     private Button shoppingLists = new Button("Shopping Lists"), 
     			todoLists = new Button("To Do Lists"), 
+    			appointmentsLists = new Button("Appointments"), 
+    	    	totakeLists = new Button("To Take Lists"), 
     			about = new Button("About"), 
+    	    	logout = new Button("Logout"), 
     	    	quit = new Button("Quit"), 
     			backToMenu = new Button("Back To Menu");
-
-    private final String ERROR_FILLOUTFIELDS = "Please fill out all the fields";
-    private final String ERROR_LOGINFAILED = "Incorrect username or password";
-    private final String ERROR_DIFFERENTPASSWORD = "'Repeat Password' must match 'Password'";
-    private final String ERROR_ACCOUNTOWNED = "An account with this username already exists !";
     
     // List with all the buttons "queued" to be added in the list, will get cleared each time a new set of buttons will be added
     private ArrayList<Button> buttonsToAdd = new ArrayList<Button>();
@@ -92,12 +66,13 @@ public class UIController implements Initializable
     private final LinkedHashMap<Button, EventHandler<ActionEvent>> mainMenuButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
     private final LinkedHashMap<Button, EventHandler<ActionEvent>> shoppingListButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
     private final LinkedHashMap<Button, EventHandler<ActionEvent>> todoListButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
+    private final LinkedHashMap<Button, EventHandler<ActionEvent>> appointmentsButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
+    private final LinkedHashMap<Button, EventHandler<ActionEvent>> totakeListButtons = new LinkedHashMap<Button, EventHandler<ActionEvent>>();
 
-	public void initialize(URL url, ResourceBundle bundle) 
+	public void initialize(URL location, ResourceBundle resources) 
 	{
-		String fileName = url.getFile().substring(url.getFile().lastIndexOf('/') + 1, url.getFile().length() );
-		String uiName = fileName.substring(0, fileName.lastIndexOf('.'));
-				
+		buttonAddNewNote.setVisible(false);
+		
 		// Initializing the hashmaps with the corresponding buttons for each menu
 		mainMenuButtons.put(shoppingLists, new EventHandler<ActionEvent>() 
 		{
@@ -107,15 +82,27 @@ public class UIController implements Initializable
 		{
             public void handle(ActionEvent e) { handleOpenToDoLists(e); }
 		});
+		mainMenuButtons.put(appointmentsLists, new EventHandler<ActionEvent>() 
+		{
+            public void handle(ActionEvent e) { handleOpenAppointmentsLists(e); }
+		});
+		mainMenuButtons.put(totakeLists, new EventHandler<ActionEvent>() 
+		{
+            public void handle(ActionEvent e) { handleOpenToTakeLists(e); }
+		});
 		mainMenuButtons.put(about, new EventHandler<ActionEvent>() 
 		{
             public void handle(ActionEvent e) { /** TODO add About page handling */ }
+		});
+		mainMenuButtons.put(logout, new EventHandler<ActionEvent>() 
+		{
+            public void handle(ActionEvent e) { UIManager.instance.showScreen(((Control)e.getSource()), UIScreen.LOGIN); }
 		});
 		mainMenuButtons.put(quit, new EventHandler<ActionEvent>() 
 		{
             public void handle(ActionEvent e) { Platform.exit(); }
 		});
-		
+
 		shoppingListButtons.put(new Button("My Shopping List"), new EventHandler<ActionEvent>() 
 		{
             public void handle(ActionEvent e) { /** TODO add handling method for lists, showing each note inside paneListNotes */ }
@@ -134,26 +121,30 @@ public class UIController implements Initializable
             public void handle(ActionEvent e) { handleCloseLists(e); }
 		});
 		
-		if(uiName.equalsIgnoreCase(UIScreen.LOGIN.getPath()))
+		appointmentsButtons.put(new Button("Appointments"), new EventHandler<ActionEvent>() 
 		{
-			labelLoginError.setVisible(false);
-		}
-		else if(uiName.equalsIgnoreCase(UIScreen.REGISTER.getPath()))
+            public void handle(ActionEvent e) { /** TODO add handling method for lists, showing each note inside paneListNotes */ }
+		});
+		appointmentsButtons.put(backToMenu, new EventHandler<ActionEvent>() 
 		{
-			labelRegError.setVisible(false);
-		}
-		else if(uiName.equalsIgnoreCase(UIScreen.LISTSMENU.getPath()))
-		{		
-			buttonAddNewNote.setVisible(false);
-			
-			initButtons(mainMenuButtons);
-		}
+            public void handle(ActionEvent e) { handleCloseLists(e); }
+		});
+		
+		totakeListButtons.put(new Button("To Take Lists"), new EventHandler<ActionEvent>() 
+		{
+            public void handle(ActionEvent e) { /** TODO add handling method for lists, showing each note inside paneListNotes */ }
+		});
+		totakeListButtons.put(backToMenu, new EventHandler<ActionEvent>() 
+		{
+            public void handle(ActionEvent e) { handleCloseLists(e); }
+		});
+				
+		initButtons(mainMenuButtons);
 	}
 	
-	private void initButtons(HashMap<Button, EventHandler<ActionEvent>> list)
+	private void initButtons(LinkedHashMap<Button, EventHandler<ActionEvent>> list) 
 	{
-		this.paneListsMenu.getChildren().clear();
-		
+		this.paneListsMenu.getChildren().clear();		
 		try
 		{
 			for(Entry<Button, EventHandler<ActionEvent>> entry : list.entrySet())
@@ -172,10 +163,9 @@ public class UIController implements Initializable
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
+		}		
 	}
 	
-	/** TODO Setup a pane with different controls for title, description, additional buttons */
 	private void addNoteInList(Note note)
 	{
 		try
@@ -255,6 +245,26 @@ public class UIController implements Initializable
 			
 			ImageView timerNoteImage = new ImageView();
 			Button timerNote = createOptionButton(587, new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")), timerNoteImage);
+			timerNote.setOnAction(new EventHandler<ActionEvent>()
+			{
+				public void handle(ActionEvent event) 
+				{
+			        Parent root;
+			        try 
+			        {
+			            root = FXMLLoader.load(getClass().getResource("UIReminderTime.fxml"));
+			            Stage stage = new Stage();
+			            stage.getIcons().add(new Image(getClass().getResourceAsStream("/assets/icons8-google-alerts-100.png")));
+			            stage.setTitle("Set Reminder");
+			            stage.setScene(new Scene(root, 330, 250));
+			            stage.show();
+			        }
+			        catch (Exception e) 
+			        {
+			            e.printStackTrace();
+			        }
+				}	
+			});	
 			
 			ImageView deleteNoteImage = new ImageView();
 			Button deleteNote = createOptionButton(664, new Image(getClass().getResourceAsStream("/assets/icons8-cancel-100.png")), deleteNoteImage);			
@@ -295,97 +305,7 @@ public class UIController implements Initializable
 		
 		return genericBtn;
 	}
-	
-	public void showScreen(Control child, UIScreen ui)
-	{
-		showScreen((Stage) child.getScene().getWindow(), ui);
-	}
-	
-	public void showScreen(Stage stage, UIScreen ui)
-	{
-		try 
-		{
-			Parent rootUI = FXMLLoader.load(getClass().getResource(ui.getPath() + ".fxml"));
-						
-			Scene scene = new Scene(rootUI);
-			
-	        stage.setTitle(ui.getTitle());
-			stage.setScene(scene);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-	}
 
-	@FXML
-	public void handleLogin(ActionEvent event)
-	{
-		this.showScreen(buttonRegister, UIScreen.LISTSMENU);
-		/*if(!this.fieldUsername.getText().isEmpty() && !this.fieldPassword.getText().isEmpty())
-		{
-			User usr = LoginService.getInstance().login(this.fieldUsername.getText(), this.fieldPassword.getText()).orElse(null);
-			
-			if(usr != null)
-			{
-				this.showScreen(buttonRegister, UIScreen.LISTSMENU);
-			}
-			else
-			{
-				this.labelLoginError.setText(this.ERROR_LOGINFAILED);
-				this.labelLoginError.setVisible(true);
-			}
-		}
-		else
-		{
-			this.labelLoginError.setText(this.ERROR_FILLOUTFIELDS);
-			this.labelLoginError.setVisible(true);
-		}*/
-	}
-	
-	@FXML
-	public void handleConfirmRegistration(ActionEvent event)
-	{
-		if(!this.fieldUsername.getText().isEmpty() && !this.fieldPassword.getText().isEmpty() && !this.fieldPasswordRepeat.getText().isEmpty() && !this.fieldEmail.getText().isEmpty())
-		{
-			if(this.fieldPassword.getText().equalsIgnoreCase(this.fieldPasswordRepeat.getText()))
-			{
-				boolean reg = LoginService.getInstance().registration(this.fieldUsername.getText(), this.fieldPassword.getText(), this.fieldEmail.getText());
-				
-				if(reg)
-				{
-					this.showScreen(buttonConfirmRegister, UIScreen.LISTSMENU);
-				}
-				else
-				{
-					this.labelRegError.setText(this.ERROR_ACCOUNTOWNED);
-					this.labelRegError.setVisible(true);
-				}
-			}
-			else
-			{
-				this.labelRegError.setText(this.ERROR_DIFFERENTPASSWORD);
-				this.labelRegError.setVisible(true);
-			}
-		}
-		else
-		{
-			this.labelRegError.setText(this.ERROR_FILLOUTFIELDS);
-			this.labelRegError.setVisible(true);
-		}
-	}
-	
-	@FXML
-	public void handleOpenRegistrationForm(ActionEvent event)
-	{
-		this.showScreen(buttonRegister, UIScreen.REGISTER);	
-	}
-	
-	@FXML
-	public void handleCloseRegistrationForm(ActionEvent event)
-	{
-		this.showScreen(buttonCancelRegister, UIScreen.LOGIN);
-	}
 	
 	@FXML
 	public void handleOpenShoppingLists(ActionEvent event)
@@ -397,6 +317,30 @@ public class UIController implements Initializable
 		initButtons(shoppingListButtons);	
 		
 		labelListTitle.setText("My Shopping List");
+	}
+
+	@FXML
+	public void handleOpenToTakeLists(ActionEvent event)
+	{
+		((Stage) paneListsMenu.getScene().getWindow()).setTitle("Fantastic Memory - To Take Lists ");
+		
+		buttonAddNewNote.setVisible(true);
+		buttonsToAdd.clear();
+		initButtons(totakeListButtons);
+		
+		labelListTitle.setText("My To Take List");
+	}
+
+	@FXML
+	public void handleOpenAppointmentsLists(ActionEvent event)
+	{
+		((Stage) paneListsMenu.getScene().getWindow()).setTitle("Fantastic Memory - Appointments ");
+		
+		buttonAddNewNote.setVisible(true);
+		buttonsToAdd.clear();
+		initButtons(appointmentsButtons);
+		
+		labelListTitle.setText("My Appointments");
 	}
 	
 	@FXML
@@ -422,7 +366,7 @@ public class UIController implements Initializable
 		
 		labelListTitle.setText("My Lists");
 	}
-	
+
 	@FXML
 	public void handleAddNewNote(ActionEvent event)
 	{
@@ -433,11 +377,4 @@ public class UIController implements Initializable
 		
 		this.addNoteInList(note);
 	}
-	
-	@FXML
-	public void handleShowListNotes(ActionEvent event)
-	{
-		
-	}
-
 }

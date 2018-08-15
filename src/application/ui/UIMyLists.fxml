@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -14,13 +13,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1096.0" style="-fx-background-color: #44A3D1;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.UIController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1096.0" style="-fx-background-color: #44A3D1;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.UIMyListsController">
    <children>
       <StackPane alignment="CENTER_LEFT" prefHeight="655.0" prefWidth="289.0" style="-fx-background-color: #97C145;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Group>
                <children>
-                  <Label layoutX="180.0" layoutY="120.0" prefHeight="146.0" prefWidth="132.0" />
                   <ScrollPane hbarPolicy="NEVER" hmax="0.0" layoutX="6.0" layoutY="-85.0" prefHeight="512.0" prefWidth="298.0" styleClass="listTypes" stylesheets="@css/fullstyle.css">
                      <content>
                         <VBox fx:id="paneListsMenu" prefHeight="279.0" prefWidth="300.0" spacing="20.0" />

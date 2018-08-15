@@ -1,13 +1,8 @@
 package application;
 	
-import java.io.IOException;
-
-import application.ui.UIController;
+import application.ui.UIManager;
 import application.ui.UIScreen;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -27,7 +22,7 @@ public class Main extends Application
 			e.printStackTrace();
 		}
 		
-		UIController.instance.showScreen(primaryStage, UIScreen.LOGIN);	
+		UIManager.instance.showScreen(primaryStage, UIScreen.LOGIN);	
 		
 		primaryStage.show();
 	}
