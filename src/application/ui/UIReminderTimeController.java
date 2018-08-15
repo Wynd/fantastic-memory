@@ -62,7 +62,7 @@ public class UIReminderTimeController implements Initializable
 	private void loadSavedReminders()
 	{
 		List<Email> unsentMails = EmailsService.getInstance().getUnsentEmails();
-
+				
 		for(Email e : unsentMails)
 		{
 			createNewReminder(e);
@@ -101,7 +101,7 @@ public class UIReminderTimeController implements Initializable
 			reminderDatePicker.setPrefSize(136, 25);
 			reminderDatePicker.setLayoutX(14);
 			reminderDatePicker.setLayoutY(41);
-			reminderDatePicker.setValue(mail.getDate_scheduled() != null  ? mail.getDate_scheduled().toLocalDate() : LocalDate.now());
+			//reminderDatePicker.setValue(mail.getDate_scheduled() != null  ? mail.getDate_scheduled().toLocalDate() : LocalDate.now());
 			Callback<DatePicker, DateCell> dayCellFactory = (final DatePicker datePicker) -> new DateCell() 
 			{
 			    public void updateItem(LocalDate item, boolean empty) 
@@ -121,8 +121,7 @@ public class UIReminderTimeController implements Initializable
 			reminderTimePicker.setLayoutX(175);
 			reminderTimePicker.setLayoutY(41);
 			reminderTimePicker.setAlignment(Pos.CENTER);
-			System.out.println(mail.getDate_scheduled() != null ? mail.getDate_scheduled().getHour() + ":" + mail.getDate_scheduled().getMinute() : "as");
-			reminderTimePicker.setText(mail.getDate_scheduled() != null ? mail.getDate_scheduled().getHour() + ":" + mail.getDate_scheduled().getMinute() : "");
+			//reminderTimePicker.setText(mail.getDate_scheduled() != null ? mail.getDate_scheduled().getHour() + ":" + mail.getDate_scheduled().getMinute() : "");
 			reminderTimePicker.setPromptText("HH:MM");
 			
 			controlShadow.setSpread(0);
@@ -135,7 +134,7 @@ public class UIReminderTimeController implements Initializable
 			{
 				public void handle(ActionEvent event) 
 				{
-					if(mail.getDate_scheduled() != null)
+					if(mail.getDate_scheduled() == null)
 					{
 						int year = reminderDatePicker.getValue().getYear();
 						int month = reminderDatePicker.getValue().getMonthValue();
@@ -159,8 +158,6 @@ public class UIReminderTimeController implements Initializable
 								NotesService.getInstance().createReminder(UIManager.instance.getNoteForReminder().getId(), mail.getDate_scheduled());	
 								
 								reminderSetImage.setImage(new Image(getClass().getResourceAsStream("/assets/icons8-stop-100.png")));
-								paneListsMenu.getChildren().remove(newReminderRoot);
-								loadSavedReminders();
 							}
 						}
 					}
@@ -197,6 +194,7 @@ public class UIReminderTimeController implements Initializable
     @FXML
     void handleCancel(ActionEvent event) 
     {
+    	UIManager.instance.setNoteForReminder(null);
     	((Stage)((Control)event.getSource()).getScene().getWindow()).close();
     }
 
