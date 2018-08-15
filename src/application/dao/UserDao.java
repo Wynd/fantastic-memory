@@ -11,7 +11,7 @@ import application.model.User;
 public class UserDao {
 	
 	 private Connection connection;
-     PreparedStatement ps1,ps2,ps3,ps4;
+     PreparedStatement ps1,ps2,ps3,ps4,ps5;
 	public UserDao(Connection connection) {	
 		this.connection=connection;
 		try {
@@ -19,6 +19,7 @@ public class UserDao {
 			ps2=this.connection.prepareStatement("select * from users where username=?");
 			ps3=this.connection.prepareStatement("update users set password=? where username=?");
 			ps4=this.connection.prepareStatement("update users set email=? where username=?");
+			ps5=this.connection.prepareStatement("select * from users where id=?");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -88,4 +89,26 @@ public class UserDao {
 		}
 		
 	}
+	public Optional<User> findUserAfterId(int id) {
+        User user=null;
+      
+         
+           
+           try {
+        		   ps5.setInt(1,id);
+        		   ResultSet rs=ps5.executeQuery();
+               if(rs.next()){
+                  user=new User();
+                   user.setId(id);
+                   user.setUsername(rs.getString(2));
+                   user.setPassword(rs.getString(3));
+                   user.setEmail(rs.getString(4));
+                   user.setId_date(rs.getInt(5));
+               }
+           }catch(Exception ex){
+               ex.printStackTrace();
+           }
+       return Optional.ofNullable(user);
+   }
 }
+
